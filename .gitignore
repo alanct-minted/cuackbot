@@ -1,3 +1,5 @@
 node_modules
 .DS_Store*
 start.sh
+npm-debug.log
+cuackbot.sh
