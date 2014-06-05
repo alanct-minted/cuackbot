@@ -9,7 +9,10 @@ module.exports = (robot) ->
     'Hmmm...',
     'Continue please',
     'ok',
-    'Keep going while I think about it'
+    'Keep going while I think about it',
+    'Go on...',
+    'Right',
+    'Sure'
   ]
 
   # Be courteous and say hello
