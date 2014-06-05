@@ -46,27 +46,34 @@ module.exports = (robot) ->
                         changes = true
                     else
                         msg.send "my source code is up-to-date"
-                try
-                    msg.send "npm update..."
-                    child_process.exec 'npm update', (error, stdout, stderr) ->
-                        if error
-                            msg.send "npm update failed: " + stderr
-                        else
-                            output = stdout+''
-                            if /node_modules/.test output
-                                msg.send "some dependencies updated:\n" + output
-                                changes = true
-                            else
-                                msg.send "all dependencies are up-to-date"
-                        if changes
-                            downloaded_updates = true
-                            msg.send "I downloaded some updates, KILL ME PLEASE! (hint: hubot die)"
-                        else
-                            if downloaded_updates
-                                msg.send "I have some pending updates, KILL ME PLEASE! (hint: hubot die)"
-                            else
-                                msg.send "I'm up-to-date!"
-                catch error
-                    msg.send "npm update failed: " + error
         catch error
             msg.send "git pull failed: " + error
+
+    robot.respond /npm update( yourself)?$/i, (msg) ->
+        unless robot.auth.isAdmin msg.envelope.user
+            return
+
+        changes = false
+        try
+            msg.send "npm update..."
+            child_process.exec 'npm update', (error, stdout, stderr) ->
+                if error
+                    msg.send "npm update failed: " + stderr
+                else
+                    output = stdout+''
+                    if /node_modules/.test output
+                        msg.send "some dependencies updated:\n" + output
+                        changes = true
+                    else
+                        msg.send "all dependencies are up-to-date"
+                if changes
+                    downloaded_updates = true
+                    msg.send "I downloaded some updates, KILL ME PLEASE! (hint: hubot die)"
+                else
+                    if downloaded_updates
+                        msg.send "I have some pending updates, KILL ME PLEASE! (hint: hubot die)"
+                    else
+                        msg.send "I'm up-to-date!"
+        catch error
+            msg.send "npm update failed: " + error
+
